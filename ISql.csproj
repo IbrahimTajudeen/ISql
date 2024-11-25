@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0DBDEE12-5DBB-4C01-8533-95FA4B245455}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Isac.ISql</RootNamespace>
+    <AssemblyName>ISql</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="COMMENT_DRAWING.txt" />
+    <Compile Include="Isac.Isql.Collections\Cell.cs" />
+    <Compile Include="Isac.Isql.Collections\Column.cs" />
+    <Compile Include="Isac.Isql.Collections\ColumnDefination.cs" />
+    <Compile Include="Isac.Isql.Collections\DataTable.cs" />
+    <Compile Include="Isac.Isql.Collections\DataTableSet.cs" />
+    <Compile Include="Isac.Isql.Collections\Details.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\CellAdd.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\CellModify.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\CellPropertyGet.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\CellPropertySet.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\CellRetrive.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ColumnAdd.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ColumnGet.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ColumnRemove.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ColumnSet.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ParentInspect.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ParentRemove.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\ParentSet.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\RowAdd.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\RowModify.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\RowRemove.cs" />
+    <Compile Include="Isac.Isql.Collections\Events\RowRetrive.cs" />
+    <Compile Include="Isac.Isql.Collections\Interface\ITable.cs" />
+    <Compile Include="Isac.Isql.Collections\Interface\ITreeMap.cs" />
+    <Compile Include="Isac.Isql.Collections\Interface\ITreeNode.cs" />
+    <Compile Include="Isac.Isql.Collections\IRowCollection.cs" />
+    <Compile Include="Isac.Isql.Collections\Row.cs" />
+    <Compile Include="Isac.Isql.Collections\RowCollection.cs" />
+    <Compile Include="Isac.Isql.Collections\TreeMap.cs" />
+    <Compile Include="Isac.Isql.Configurations\Configuration.cs" />
+    <Compile Include="Isac.Isql.Configurations\DatabaseConfiguaration.cs" />
+    <Compile Include="Isac.Isql.Configurations\TableConfiguaration.cs" />
+    <Compile Include="Isac.Isql.Configurations\UserConfiguaration.cs" />
+    <Compile Include="Isac.Isql.Logistics\Events\ILogic.cs" />
+    <Compile Include="Isac.Isql.Logistics\Events\PortEvent.cs" />
+    <Compile Include="Isac.Isql.Logistics\Expression.cs" />
+    <Compile Include="Isac.Isql.Logistics\Logic_Expression.cs" />
+    <Compile Include="Isac.Isql.Permissions\DatabasePermission.cs" />
+    <Compile Include="Isac.Isql.Permissions\Permission.cs" />
+    <Compile Include="Isac.Isql.Permissions\TablePermission.cs" />
+    <Compile Include="Isac.Isql.Permissions\UserPermission.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Alter.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Database.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Delete.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Events\AllEvent.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Events\InsertEvents.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Groups.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Insert.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Join.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Query.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Table.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Turnacate.cs" />
+    <Compile Include="Isac.Isql.QueryCommand\Update.cs" />
+    <Compile Include="Isac.Isql\Connection.cs" />
+    <Compile Include="Isac.Isql\Create.cs" />
+    <Compile Include="Isac.Isql\Credentials.cs" />
+    <Compile Include="Isac.Isql\Drop.cs" />
+    <Compile Include="Isac.Isql\DynamicCaller.cs" />
+    <Compile Include="Isac.Isql\Events.cs" />
+    <Compile Include="Isac.Isql\ISqlCon.cs" />
+    <Compile Include="Isac.Isql\iSqlConnection.cs" />
+    <Compile Include="Isac.Isql\ISqlException.cs" />
+    <Compile Include="Isac.Isql\Permission.cs" />
+    <Compile Include="Isac.Isql\Show.cs" />
+    <Compile Include="Isac.Isql\Surpressor.cs" />
+    <Compile Include="Isac.Isql\User.cs" />
+    <Compile Include="Isac\BuiltInMethods.cs" />
+    <Compile Include="Isac\Encryption.cs" />
+    <Compile Include="Isac\ExtensionMethods.cs" />
+    <Compile Include="Isac\Fundamentals.cs" />
+    <Compile Include="Isac\IntermedaiteObjects.cs" />
+    <Compile Include="Isac\IProcess.cs" />
+    <Compile Include="Isac\ISql.cs" />
+    <Compile Include="Isac\ISqlLanguage.cs" />
+    <Compile Include="Isac\ISqlTypes.cs" />
+    <Compile Include="Isac\ObjectLoader.cs" />
+    <Compile Include="Isac\Passer.cs" />
+    <Compile Include="Isac\ProcessEventArgs.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

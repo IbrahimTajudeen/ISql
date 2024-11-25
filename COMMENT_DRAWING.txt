@@ -1,0 +1,151 @@
+﻿/*
+****
+****	  ************		  *************		 **************		 **************
+****	  ************		 ***************	****************	****************
+****		  ****			 ****		****	****		****	****		****
+****		  ****			 ****		****	****		****	****		****
+****		  ****			 ****				****		****	****
+****		  ****	******	 **************		****		****	****
+****		  ****	******	  **************	****************	****		
+****		  ****						****	****************	****
+****		  ****			 ****		****	****		****	****		****
+****		  ****			 ****		****	****		****	****		****
+****	  ************		 ***************	****		****	****************
+****	  ************		  *************		****		****	 **************
+****
+****
+****	  ************		  *************		 **************			****
+****	  ************		 ***************	****************		****
+****		  ****			 ****		****	****		****		****
+****		  ****			 ****		****	****		****		****
+****		  ****			 ****				****		****		****
+****		  ****	******	 **************		****		****		****
+****		  ****	******	  **************	****		****		****		
+****		  ****						****	****		****		****
+****		  ****			 ****		****	****		****		****		****
+****		  ****			 ****		****	****		******		****		****
+****	  ************		 ***************	********************	****************
+****	  ************		  *************		 **************  *****	***************
+****
+****/*
+            Parallel.For(0, elementdata.Length, async currIndex =>
+            {
+                try
+                {
+                    string data = elementdata[currIndex].Trim();
+
+                    if (data == "") throw new ISqlArguementException($"Error: empty query encountered\nQuery Segment: {currIndex}");
+
+                    string anno = (data != "") ? p.GetType(data[0]) : "";
+
+                    string query_parent = p.GetType(data[0]);
+                    object[] obj = p.GetNext(0, data,
+                            (p.GetType(data[0]) == "*") ? "all" : p.GetType(data[0]),
+                            p.STable);
+
+                    //val, nxt, anno, index
+
+                    //Collective
+                    if (obj[2].ToString() == "[" && query_parent == "@" && data.EndsWith("]"))
+                    {
+                        if (!allow_collective || never_collective)
+                            throw new ISqlException("Error: " + ((!never_collective) ? "nested collective select is not allowed" : "collective is not valid in this block"));
+
+                        CollectiveSelectBlock csb = new CollectiveSelectBlock();
+                        csb.Index = currIndex;
+                        csb.BlockType = SelectQueryType.COLLECTIVE;
+                        csb.CollectiveName = "@" + obj[0];
+
+                        string[] queries = Parser.QuerySeprator(data.Substring(data.IndexOf("[") + 1,
+                                                data.LastIndexOf("]") - data.IndexOf("[") - 1));
+                        await ParallelSelectQuery(queries, csb, false);
+                        selectObj.Add(csb);
+                    }
+
+                    //All with no Alias Done
+                    else if (data == "*")
+                    {
+                        SelectBlock sb = new SelectBlock();
+                        sb.Index = currIndex;
+                        sb.BlockType = SelectQueryType.ALL;
+                        sb.Query.Add("*");
+                        sb.done = true;
+                        if (collectives == null)
+                            selectObj.Add(sb);
+                        else
+                            collectives.Add(sb);
+                    }
+
+                    // All with alias
+                    else if (data.StartsWith("@") && data.EndsWith("*") && data.Count(x => x == '.') == 1 && obj[2].ToString() == ".")
+                    {
+                        SelectBlock sb = new SelectBlock();
+                        sb.Index = currIndex;
+                        sb.BlockType = SelectQueryType.ALLALIAS;
+                        sb.Query.Add(data);
+                        sb.done = true;
+                        if (collectives == null)
+                            selectObj.Add(sb);
+                        else
+                            collectives.Add(sb);
+                    }
+
+                    //Logic
+                    else if (data.Contains(">") || data.Contains("<") || data.Contains("<=") || data.Contains(">=") || data.Contains("<>")
+                        || data.Contains("!=") || data.Contains("==") || data.Contains("&&") || data.Contains("||") || data.Contains("!"))
+                    {
+                        string[] aliased_data = Parser.AliasGetter(data);
+                        var logicEngine = new Isac.Isql.Logistics.LogicExpressionEngine(aliased_data[0]);
+                        SelectBlock selectBlock = logicEngine.GetSelectBlock();
+                        selectBlock.Index = currIndex;
+                        selectBlock.BlockType = SelectQueryType.LOGIC;
+                        selectBlock.QueryAlias = (aliased_data.Length == 2) ? aliased_data[1] : aliased_data[0];
+                        selectBlock.done = true;
+                        if (collectives == null)
+                            selectObj.Add(selectBlock);
+                        else
+                            collectives.Add(selectBlock);
+                    }
+
+                    //Maths
+                    else if ((data.Contains("+") || data.Contains("-") || data.Contains("*") || data.Contains("/") || data.Contains("%")
+                        || data.Contains("^")) && !data.StartsWith("*"))
+                    {
+                        string[] aliased_data = Parser.AliasGetter(data);
+                        var expEngine = new Isac.Isql.Logistics.ExpressionEngine(aliased_data[0]);
+                        SelectBlock selectBlock = expEngine.GetSelectBlock();
+                        selectBlock.Index = currIndex;
+                        selectBlock.BlockType = SelectQueryType.EXPRESSION;
+                        selectBlock.QueryAlias = (aliased_data.Length == 2) ? aliased_data[1] : aliased_data[0];
+                        selectBlock.done = true;
+                        if (collectives == null)
+                            selectObj.Add(selectBlock);
+                        else
+                            collectives.Add(selectBlock);
+                    }
+
+                    //Simple Singles (ie:- number var/keyword string(nvar))			
+                    else if (anno == "@" || anno == "name" || anno == "number" || anno == "(" || anno == "value" || anno == "nval" || anno == "[")
+                    {
+                        string[] aliased_data = Parser.AliasGetter(data);
+                        var logicEngine = new Isac.Isql.Logistics.LogicExpressionEngine(aliased_data[0]);
+                        SelectBlock selectBlock = logicEngine.GetSelectBlock();
+                        selectBlock.Index = currIndex;
+                        selectBlock.QueryAlias = (aliased_data.Length == 2) ? aliased_data[1] : aliased_data[0];
+                        selectBlock.BlockType = SelectQueryType.SINGLE;
+                        selectBlock.done = true;
+                        if (collectives == null)
+                            selectObj.Add(selectBlock);
+                        else
+                            collectives.Add(selectBlock);
+                    }
+
+                    else throw new ISqlException($"ERROR: unrecognized query '{data}'");
+                } catch(Exception ex)
+                {
+                    throw;
+                }
+            });
+            */
+
+*/
